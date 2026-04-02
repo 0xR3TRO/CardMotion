@@ -118,14 +118,15 @@ export function normalizeCVV(value) {
 }
 
 /**
- * Validate if a CSS gradient string is syntactically accepted by the browser.
+ * Validate if a CSS background-image string is accepted by the browser.
+ * Supports gradients and url(...) values.
  * @param {string} value
  * @returns {boolean}
  */
-export function isGradient(value) {
+export function isBackgroundFill(value) {
   const candidate = String(value ?? "").trim();
 
-  if (!candidate || !/gradient\(/i.test(candidate)) {
+  if (!candidate || !/(gradient\(|url\()/i.test(candidate)) {
     return false;
   }
 

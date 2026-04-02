@@ -1,115 +1,185 @@
-## Project Description
+# CardMotion Display
 
-### Goal:
+CardMotion Display is a production-ready, client-side credit card preview component built with **pure HTML, CSS, and JavaScript**.
+It renders an interactive payment card inside a browser-window mockup with realistic 3D motion and a live customization panel.
 
-The "Credit Card Animation in Browser Window" project aims to provide users with an interactive tool for presenting a credit card in an attractive and user-friendly manner within a web browser window. This animation can be utilized on banking websites, financial platforms, or in e-commerce applications.
+## Highlights
 
-### Feature Description:
+- Front/back credit card with smooth 3D flip (click card or button).
+- Cursor-driven tilt/parallax with configurable max rotation (`15deg` by default).
+- Dynamic shine/reflection layer following pointer position.
+- Editable fields:
+  - Cardholder name
+  - Card number (masked on card preview)
+  - Expiration date
+  - CVV (visible on card back)
+  - Brand logo (Visa, MasterCard, Custom SVG)
+- Browser frame mockup:
+  - macOS-style 3 top dots
+  - URL bar placeholder
+  - soft shadow + rounded shell
+- Optional demo auto-rotate mode.
+- Touch-friendly interactions and responsive scaling.
+- No frameworks, no external runtime dependencies.
 
-- **Credit Card Animation:** Users will be able to view a smooth animation of a credit card within the browser window.
-- **Interactivity:** Ability for user interaction, such as card movement, color changes, etc.
-- **Customization:** Access to tools for customizing the appearance of the card, such as background color, font, icons, etc.
-- **Responsiveness:** Ensuring that the animation is responsive and adapted to different screen sizes.
+## Tech Stack
 
-## Requirements Analysis:
+- HTML5 semantic structure
+- Modern CSS (variables, gradients, 3D transforms, media queries)
+- ES modules (vanilla JavaScript)
 
-### Functional Requirements:
+## Project Structure
 
-- **Credit Card Animation:** Users can view a smooth animation of the credit card within the browser window.
-- **Interactivity:** Ability for interaction, such as card movement, color changes.
-- **Customization:** Access to customization options for the card's appearance.
-- **Responsiveness:** Ensuring the animation is responsive across different devices and screen resolutions.
+```text
+.
+├── index.html
+├── style.css
+├── js
+│   ├── card.js
+│   ├── interactions.js
+│   ├── customize.js
+│   └── utils.js
+├── assets
+│   └── logos
+│       ├── visa.svg
+│       ├── mastercard.svg
+│       └── custom.svg
+├── LICENSE
+└── README.md
+```
 
-### Non-functional Requirements:
+## Quick Start
 
-- **Smooth Animation:** Expectation for the animation to be smooth and free of delays.
-- **Aesthetic Appearance:** Ensuring the animation presents itself aesthetically and professionally.
-- **Browser Compatibility:** Ensuring compatibility with various web browsers.
+1. Clone/download the repository.
+2. Open `index.html` directly in a browser.
+3. (Optional) Serve with any static server for local dev comfort.
 
-## Interface Design:
+Example:
 
-### Sketches/Visualizations of Interface:
+```bash
+python3 -m http.server 8080
+```
 
-- _Credit Card Animation:_ Main window with the animated card.
-- _Customization Panel:_ Panel with customization options, such as color changes, fonts, etc.
+Then open `http://localhost:8080`.
 
-### Site Map:
+## Component Architecture
 
-- _Credit Card Animation_
-  - Main window with animation
-  - User interactions
-- _Customization Panel_
-  - Options for customizing the card's appearance
+### `js/utils.js`
+Shared helpers:
 
-## System Architecture:
+- numeric sanitization
+- card formatting (input + masked preview)
+- expiration/CVV normalization
+- clamp/lerp helpers for animation math
+- gradient syntax validation
 
-### Description of Data Structure:
+### `js/card.js`
+Rendering/state layer:
 
-The application stores data related to the appearance of the credit card, including:
+- owns card state (`name`, `number`, `expiry`, `cvv`, `brand`, `theme`)
+- updates DOM for front/back fields
+- applies CSS variables for theme/gradient
+- applies flip state + aria visibility
+- exposes methods to set tilt, shine, and parallax transforms
 
-- **Customization Parameters:** Information about the customization parameters selected by the user.
-- **Card Appearance:** Data regarding the card's appearance, such as background color, font, icons, etc.
+### `js/interactions.js`
+Interaction/animation controller:
 
-### Architecture Diagrams:
+- pointer-based tilt calculation
+- cursor-follow shine hotspot
+- parallax depth transforms per card layer
+- click/keyboard flip actions
+- optional auto-rotate demo loop
+- reduced-motion handling
 
-The architecture is based on a simple client-server model, where:
+### `js/customize.js`
+Composition + control bindings:
 
-- **Client:** User's web browser, displaying the animation.
-- **Server:** Web server hosting the application and handling user interactions.
+- mounts the component
+- wires all panel fields/toggles to live updates
+- exports `mountCardMotionDisplay(root, options)` for embedding
+- exposes `window.CardMotionDisplay.mount(...)`
 
-## Implementation:
+## Animation Model
 
-### Technology Description:
+### Tilt
 
-- **Frontend:** HTML, CSS, JavaScript (React.js or other framework for building the interface).
-- **Backend:** Optionally, depending on requirements, e.g., Node.js for handling HTTP requests.
-- **Animation:** Utilization of animation libraries, such as CSS transitions or JavaScript libraries (e.g., GSAP).
-- **Responsiveness:** Media queries and styling adjustments for different devices.
+Cursor position is normalized to card-local coordinates (`0..1`) and mapped to signed center offsets (`-1..1`).
+Those offsets are translated to rotation values in the range `[-maxTilt, +maxTilt]` and smoothed with linear interpolation.
 
-### Code Structure:
+### Shine
 
-- _Directories/Files_: Separate files for animation logic, interface, customization.
-- _Coding Style_: Application of modularity, readability, and comments in the code.
+Shine is a radial gradient overlay. Its center follows normalized cursor coordinates, and opacity increases with tilt magnitude.
 
-## Testing:
+### Parallax
 
-### Test Plan:
+Each marked layer (`.card-layer`) uses `data-depth` and receives a depth-scaled `translate3d(...)` transform.
+This gives independent movement of number/chip/logo/background while preserving card perspective.
 
-- **Unit Tests:** Checking the correctness of animation and interactive functions.
-- **User Interface Tests:** Ensuring responsiveness of the animation on different devices.
-- **Compatibility Tests:** Ensuring the animation works correctly on various web browsers.
+### Flip
 
-### Testing Procedures:
+Front/back sides are stacked in 3D (`backface-visibility: hidden`) and switched with `rotateY(180deg)`.
 
-- Development of a set of test cases for each animation function.
-- Regular testing on different devices and browsers.
+## Customization Panel Controls
 
-## Deployment and Maintenance:
+| Control | Effect |
+|---|---|
+| Cardholder name | Updates front-side cardholder text |
+| Card number | Formats input groups and renders masked number on card |
+| Expiration | Normalized to `MM/YY` |
+| CVV | Numeric-only, shown on back |
+| Theme | Applies preset gradients and text tones |
+| Background fill | Custom CSS `gradient(...)` or `url(...)` |
+| Brand | Switches SVG logo |
+| Shine effect | Enables/disables reflection layer |
+| Parallax tilt | Enables/disables tilt and layer depth motion |
 
-### Deployment Plan:
+## Embedding In Another Page
 
-- **Deployment Stages:** Testing, corrections, deployment on clients' websites.
-- **Timelines:** Determination of dates for planned deployment stages.
+If you import modules manually, you can mount the component in your own layout:
 
-### Maintenance Procedures:
+```html
+<script type="module">
+  import { mountCardMotionDisplay } from "./js/customize.js";
 
-- **Technical Support:** Establishment of communication channels with clients for issue reporting.
-- **Updates:** Regular updates to improve animation functionality and adapt it to changing browser standards.
+  const root = document.querySelector("#cardMotionDisplay");
+  mountCardMotionDisplay(root, {
+    controlsRoot: document
+  });
+</script>
+```
 
-## Schedule:
+For non-module integration in this demo setup, a global helper is also exposed:
 
-### Project Plan:
+```js
+window.CardMotionDisplay.mount(rootElement);
+```
 
-- **Implementation Stages:** Division of work into specific tasks (e.g., animation implementation, interactions, testing).
-- **Timelines:** Determination of time required for each implementation stage.
+## Accessibility
 
-## Cost Estimate:
+- Keyboard flip support (`Enter` / `Space`) on the card stage.
+- `aria-hidden` synchronized between front/back card faces.
+- Focus-visible styles for controls/buttons.
+- Reduced motion preference respected (`prefers-reduced-motion`).
 
-### Estimated Costs:
+## Security Note
 
-- **Application Development:** Based on hours worked or team of developers.
-- **Maintenance Costs:** Servers, potential fees for external services, technical support.
+This project is a visual demo. Do not store real PAN/CVV in logs, local storage, analytics, or telemetry.
+Use tokenization and PCI-compliant infrastructure in production payments.
 
----
+## Browser Support
 
-[Polish](Documents/README[PL].md)
+Designed for modern evergreen browsers with support for:
+
+- CSS variables
+- ES modules
+- `pointer` events
+- `backdrop-filter` (graceful visual degradation if unavailable)
+
+## Removed Legacy Texture
+
+Legacy texture/assets from the old tutorial scaffold were removed and replaced by layered gradients + procedural highlights.
+
+## License
+
+MIT License. See [LICENSE](LICENSE).

@@ -3,7 +3,7 @@ import { CardInteractions } from "./interactions.js";
 import {
   digitsOnly,
   formatInputCardNumber,
-  isGradient,
+  isBackgroundFill,
   normalizeCVV,
   normalizeExpiry
 } from "./utils.js";
@@ -100,7 +100,7 @@ export function mountCardMotionDisplay(root, options = {}) {
   if (gradientInput instanceof HTMLInputElement) {
     const applyGradient = () => {
       const value = gradientInput.value.trim();
-      const valid = isGradient(value);
+      const valid = isBackgroundFill(value);
 
       gradientInput.classList.toggle("is-invalid", !valid);
 
