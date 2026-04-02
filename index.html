@@ -1,54 +1,192 @@
-<!DOCTYPE html>
-<!-- Coding By CodingNepal - codingnepalweb.com -->
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Payment</title>
-		<link rel="stylesheet" href="Directories/style.css" />
-	</head>
-	<body>
-		<section>
-			<div class="container">
-				<div class="card front-face">
-					<header>
-						<span class="logo">
-							<img src="Media & Images/logo.png" alt="logo" />
-							<h5>Master Card</h5>
-						</span>
-						<img src="Media & Images/chip.png" alt="chip" class="chip" />
-					</header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CardMotion Display</title>
+    <meta
+      name="description"
+      content="CardMotion Display: interactive, client-side credit card web component with flip, tilt, shine, and live customization."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="component-area" aria-labelledby="cardmotion-title">
+        <header class="component-header">
+          <p class="eyebrow">Web Component Demo</p>
+          <h1 id="cardmotion-title">CardMotion Display</h1>
+          <p class="subtitle">
+            Interactive payment card preview with realistic 3D motion, browser mockup frame, and live customization.
+          </p>
+        </header>
 
-					<div class="card-details">
-						<div class="name-number">
-							<h6>Card Number</h6>
-							<h5 class="number">8050 2030 3020 5040</h5>
-							<h5 class="name">Prem Kumar Shahi</h5>
-						</div>
+        <article class="browser-window" aria-label="Browser mockup window">
+          <div class="browser-topbar" aria-hidden="true">
+            <div class="window-controls">
+              <span class="dot dot-close"></span>
+              <span class="dot dot-minimize"></span>
+              <span class="dot dot-maximize"></span>
+            </div>
+            <div class="url-bar">https://cardmotion.local/preview</div>
+          </div>
 
-						<div class="valid-date">
-							<h6>Valid Thru</h6>
-							<h5>05/28</h5>
-						</div>
-					</div>
-				</div>
+          <div class="browser-content">
+            <div
+              class="cardmotion-display"
+              id="cardMotionDisplay"
+              data-shine-enabled="true"
+              data-parallax-enabled="true"
+              data-flipped="false"
+            >
+              <div class="card-stage" data-card-stage>
+                <div class="credit-card" data-credit-card role="img" aria-label="Interactive credit card preview">
+                  <div class="card-face card-front" aria-hidden="false">
+                    <div class="card-bg card-layer" data-depth="0.09"></div>
+                    <div class="card-grain"></div>
+                    <div class="shine-layer" data-shine-layer></div>
 
-				<div class="card back-face">
-					<h6>
-						For customer service call +977 4343 3433 or email at
-						mastercard@gmail.com
-					</h6>
-					<span class="magnetic-strip"></span>
-					<div class="signature"><i>005</i></div>
-					<h5>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
-						maiores sed doloremque nesciunt neque beatae voluptatibus doloribus.
-						Libero et quis magni magnam nihil temporibus? Facere consectetur
-						dolore reiciendis et veniam.
-					</h5>
-				</div>
-			</div>
-		</section>
-	</body>
+                    <header class="card-header">
+                      <div class="brand-lockup card-layer" data-depth="0.16">
+                        <img
+                          src="assets/logos/visa.svg"
+                          alt="Card brand logo"
+                          class="brand-logo"
+                          data-brand-logo
+                          width="66"
+                          height="24"
+                        />
+                      </div>
+                      <div class="contactless card-layer" data-depth="0.14" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </header>
+
+                    <section class="card-chip-wrap">
+                      <div class="card-chip card-layer" data-depth="0.24" aria-hidden="true">
+                        <span></span>
+                      </div>
+                    </section>
+
+                    <section class="card-body">
+                      <p class="label">Card Number</p>
+                      <p class="card-number card-layer" data-depth="0.3" data-card-number>**** **** **** 1234</p>
+                    </section>
+
+                    <footer class="card-footer">
+                      <div>
+                        <p class="label">Cardholder</p>
+                        <p class="cardholder card-layer" data-depth="0.28" data-cardholder>Alex Morgan</p>
+                      </div>
+                      <div>
+                        <p class="label">Expires</p>
+                        <p class="expiry card-layer" data-depth="0.18" data-expiry>09/31</p>
+                      </div>
+                    </footer>
+                  </div>
+
+                  <div class="card-face card-back" aria-hidden="true">
+                    <div class="card-bg card-layer" data-depth="0.09"></div>
+                    <div class="card-grain"></div>
+                    <div class="shine-layer" data-shine-layer></div>
+
+                    <div class="mag-stripe"></div>
+                    <div class="signature-strip">
+                      <span class="signature-label">Authorized Signature</span>
+                      <span class="cvv" data-cvv>123</span>
+                    </div>
+                    <p class="back-copy">
+                      This card preview is a client-side mockup for product demos. Never store real CVV or full PAN in production logs.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="flip-btn" type="button" data-flip-button aria-controls="cardMotionDisplay" aria-pressed="false">
+                  Flip Card
+                </button>
+                <label class="demo-toggle">
+                  <input type="checkbox" data-auto-rotate />
+                  <span>Auto-rotate demo</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <aside class="customization-panel" aria-label="Card customization panel">
+        <h2>Customize</h2>
+
+        <div class="field-grid">
+          <label class="control">
+            <span>Cardholder name</span>
+            <input type="text" data-input-name maxlength="26" value="Alex Morgan" autocomplete="cc-name" />
+          </label>
+
+          <label class="control">
+            <span>Card number</span>
+            <input
+              type="text"
+              data-input-number
+              maxlength="23"
+              inputmode="numeric"
+              value="5123456789011234"
+              autocomplete="cc-number"
+            />
+          </label>
+
+          <label class="control control-inline">
+            <span>Expiration</span>
+            <input type="text" data-input-expiry maxlength="5" value="09/31" autocomplete="cc-exp" />
+          </label>
+
+          <label class="control control-inline">
+            <span>CVV</span>
+            <input type="text" data-input-cvv maxlength="4" inputmode="numeric" value="123" autocomplete="cc-csc" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="control">
+            <span>Theme</span>
+            <select data-select-theme>
+              <option value="aurora" selected>Aurora</option>
+              <option value="ember">Ember</option>
+              <option value="ocean">Ocean</option>
+              <option value="mono">Monochrome</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <span>Background gradient</span>
+            <input type="text" data-input-gradient value="linear-gradient(140deg, #0b1220 0%, #14395f 55%, #2a7db8 100%)" />
+          </label>
+
+          <label class="control">
+            <span>Brand</span>
+            <select data-select-brand>
+              <option value="visa" selected>Visa</option>
+              <option value="mastercard">MasterCard</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="toggles">
+          <label class="switch">
+            <input type="checkbox" data-toggle-shine checked />
+            <span>Shine effect</span>
+          </label>
+          <label class="switch">
+            <input type="checkbox" data-toggle-parallax checked />
+            <span>Parallax tilt</span>
+          </label>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="js/customize.js"></script>
+  </body>
 </html>
